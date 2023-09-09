@@ -1,12 +1,16 @@
-const path = require("path");
-const express = require("express");
-const app = require("./public/App.js");
+import { join } from "path";
+import express from "express";
+import app from "./public/App.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const server = express();
 
-server.use(express.static(path.join(__dirname, "public")));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-server.get("*", function(req, res) {
+server.use(express.static(join(__dirname, "public")));
+
+server.get("*", function (req, res) {
   const { html } = app.render({ url: req.url });
 
   res.write(`
@@ -31,3 +35,4 @@ server.get("*", function(req, res) {
 
 const port = 3000;
 server.listen(port, () => console.log(`Listening on http://localhost:${port}`));
+
