@@ -152,7 +152,7 @@ class Analytics {
  * @returns {function}
  */
 export function expressAnalytics(apiKey, config = new Config()) {
-  const analytics = new Analytics(apiKey, config, "Express");
+  const analytics = new Analytics(apiKey, "Express", config);
   return (req, res, next) => {
     const start = performance.now();
     next();
@@ -179,7 +179,7 @@ export function expressAnalytics(apiKey, config = new Config()) {
  * @returns {function}
  */
 export function fastifyAnalytics(apiKey, config = new Config()) {
-  const analytics = new Analytics(apiKey, config, "Fastify");
+  const analytics = new Analytics(apiKey, "Fastify", config);
   return (req, reply, done) => {
     const start = performance.now();
     done();
@@ -206,7 +206,7 @@ export function fastifyAnalytics(apiKey, config = new Config()) {
  * @returns {function}
  */
 export function koaAnalytics(apiKey, config = new Config()) {
-  const analytics = new Analytics(apiKey, config, "Koa");
+  const analytics = new Analytics(apiKey, "Koa", config);
   return async (ctx, next) => {
     const start = performance.now();
     await next();
