@@ -25,6 +25,7 @@
 	import { ColumnIndex, columns, serverURL } from '../lib/consts';
 	import Error from '../components/dashboard/Error.svelte';
 	import TopUsers from '../components/dashboard/TopUsers.svelte';
+	import { get } from 'svelte/store';
 
 	function allTimePeriod(_: Date) {
 		return true;
@@ -70,12 +71,11 @@
 	function getInRange() {
 		let inRange: (date: Date) => boolean;
 		if (settings.period === 'All time') {
+			inRange = allTimePeriod;
+		} else {
 			inRange = (date: Date) => {
 				return dateInPeriod(date, settings.period);
 			};
-		} else {
-			// If period is null, set to all time
-			inRange = allTimePeriod;
 		}
 		return inRange;
 	}
@@ -83,12 +83,11 @@
 	function getInPrevRange() {
 		let inPrevRange: (date: Date) => boolean;
 		if (settings.period === 'All time') {
+			inPrevRange = allTimePeriod;
+		} else {
 			inPrevRange = (date) => {
 				return dateInPrevPeriod(date, settings.period);
 			};
-		} else {
-			// If period is null, set to all time
-			inPrevRange = allTimePeriod;
 		}
 		return inPrevRange;
 	}
@@ -139,17 +138,11 @@
 	}
 
 	function sortedFrequencies(freq: ValueCount): string[] {
-		return Object.keys(freq)
-			.map((value) => {
-				return {
-					value: value,
-					count: freq[value],
-				};
-			})
+		return Object.entries(freq)
 			.sort((a, b) => {
-				return b.count - a.count;
+				return b[1] - a[1];
 			})
-			.map((value) => value.value);
+			.map((value) => value[0]);
 	}
 
 	function getHostnames() {
@@ -159,8 +152,11 @@
 			if (hostname === null || hostname === '' || hostname === 'null') {
 				continue;
 			}
-			hostnameFreq[hostname] |= 0;
-			hostnameFreq[hostname] += 1;
+			if (hostname in hostnameFreq) {
+				hostnameFreq[hostname]++;
+			} else {
+				hostnameFreq[hostname] = 1;
+			}
 		}
 
 		return sortedFrequencies(hostnameFreq);
@@ -372,7 +368,7 @@
 		<div class="dashboard-content">
 			<div class="left">
 				<div class="row">
-					<Logo bind:fetching={loading} />
+					<Logo bind:loading />
 					<SuccessRate data={periodData} />
 				</div>
 				<div class="row">
