@@ -4,42 +4,9 @@
 	import type { Period } from '../../../lib/settings';
 	import { initFreqMap } from '../../../lib/activity';
 	import { ColumnIndex } from '../../../lib/consts';
+	import { Chart } from 'chart.js/auto';
 
-	function defaultLayout() {
-		const days = periodToDays(period);
-		let periodAgo = new Date();
-		if (days === null) {
-			periodAgo = null;
-		} else {
-			periodAgo.setDate(periodAgo.getDate() - days);
-		}
-		const now = new Date();
-
-		return {
-			title: false,
-			autosize: true,
-			margin: { r: 35, l: 70, t: 20, b: 20, pad: 10 },
-			hovermode: 'closest',
-			plot_bgcolor: 'transparent',
-			paper_bgcolor: 'transparent',
-			height: 160,
-			barmode: 'stack',
-			yaxis: {
-				title: { text: 'Requests' },
-				gridcolor: 'gray',
-				showgrid: false,
-			},
-			xaxis: {
-				title: { text: 'Date' },
-				fixedrange: true,
-				range: [periodAgo, now],
-				visible: false,
-			},
-			dragmode: false,
-		};
-	}
-
-	function bars(data: RequestsData, period: Period) {
+	function getChartData(data: RequestsData, period: Period) {
 		const requestFreq = initFreqMap(period, () => ({
 			count: 0,
 		}));
@@ -105,64 +72,104 @@
 				`${requestFreqArr[i].userCount} users from ${requestFreqArr[i].requestCount} requests`;
 		}
 
-		return [
-			{
-				x: dates,
-				y: users,
-				text: usersText,
-				type: 'bar',
-				marker: { color: '#3fcf8e' },
-				hovertemplate: `<b>%{text}</b><br>%{x|%d %b %Y %H:%M}</b><extra></extra>`,
-				showlegend: false,
-			},
-			{
-				x: dates,
-				y: requests,
-				text: requestsText,
-				type: 'bar',
-				marker: { color: '#228458' },
-				hovertemplate: `<b>%{text}</b><br>%{x|%d %b %Y %H:%M}</b><extra></extra>`,
-				showlegend: false,
-			},
-		];
-	}
-
-	function buildPlotData(data: RequestsData, period: Period) {
 		return {
-			data: bars(data, period),
-			layout: defaultLayout(),
-			config: {
-				responsive: true,
-				showSendToCloud: false,
-				displayModeBar: false,
-			},
+			labels: dates,
+			datasets: [
+				{
+					label: 'Users',
+					data: users,
+					backgroundColor: '#3fcf8e',
+					// borderColor: '#707070',
+					borderWidth: 0,
+				},
+				{
+					label: 'Requests',
+					data: requests,
+					backgroundColor: '#228458',
+					// borderColor: '#707070',
+					borderWidth: 0,
+				},
+			],
 		};
 	}
 
-	let plotDiv: HTMLDivElement;
 	function genPlot(data: RequestsData, period: Period) {
-		const plotData = buildPlotData(data, period);
-		//@ts-ignore
-		new Plotly.newPlot(
-			plotDiv,
-			plotData.data,
-			plotData.layout,
-			plotData.config,
-		);
+		const chartData = getChartData(data, period);
+
+		const ctx = chartCanvas.getContext('2d');
+		chart = new Chart(ctx, {
+			type: 'bar',
+			data: chartData,
+			options: {
+				maintainAspectRatio: false,
+				layout: {
+					padding: {
+						top: 20,
+						left: 40,
+						right: 40,
+					},
+				},
+				scales: {
+					y: {
+						stacked: true,
+						grid: {
+							display: false,
+						},
+						border: {
+							display: false,
+						},
+						beginAtZero: true,
+					},
+					x: {
+						stacked: true,
+						grid: {
+							display: false,
+						},
+						border: {
+							color: '#2e2e2e',
+						},
+						ticks: {
+							display: false,
+						},
+					},
+				},
+				plugins: {
+					legend: {
+						display: false,
+					},
+				},
+			},
+		});
 	}
 
-	let mounted = false;
+	function updatePlot(data: RequestsData, period: Period) {
+		if (chart === null) {
+			return;
+		}
+		chart.data = getChartData(data, period);
+		chart.update();
+	}
+
+	let chart: Chart<'bar'> | null = null;
+	let chartCanvas: HTMLCanvasElement;
 	onMount(() => {
-		mounted = true;
+		genPlot(data, period);
 	});
 
-	$: data && mounted && genPlot(data, period);
+	$: if (data) {
+		updatePlot(data, period);
+	}
 
 	export let data: RequestsData, period: Period;
 </script>
 
 <div id="plotly">
-	<div id="plotDiv" bind:this={plotDiv}>
-		<!-- Plotly chart will be drawn inside this DIV -->
-	</div>
+	<canvas bind:this={chartCanvas} id="chart"></canvas>
 </div>
+
+<style scoped>
+	#chart {
+		height: 159px !important;
+		width: 100% !important;
+	}
+</style>
