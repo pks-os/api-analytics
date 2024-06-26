@@ -100,12 +100,41 @@ You can filter your data by providing URL parameters in your request.
 - `ipAddress` - the IP address of the client
 - `status` - the status code of the response
 - `location` - a two-character location code of the client
-- `user_id` - a custom user identifier (only relevant if a `get_user_id` mapper function has been set)
+- `user_id` - a custom user identifier (only relevant if a `GetUserID` mapper function has been set)
 
 Example:
 
 ```bash
 curl --header "X-AUTH-TOKEN: <API-KEY>" https://apianalytics-server.com/api/data?page=3&dateFrom=2022-01-01&hostname=apianalytics.dev&status=200&user_id=b56cbd92-1168-4d7b-8d94-0418da207908
+```
+
+## Customisation
+
+Custom mapping functions can be assigned to override the default behaviour and define how values are extracted from each incoming request to better suit your specific API.
+
+```cs
+using analytics;
+using Microsoft.AspNetCore.Mvc;
+
+var builder = WebApplication.CreateBuilder(args);
+
+var app = builder.Build();
+
+var config = Config()
+config.GetUserID = (HttpContext context) => {
+    if (context.user.Identity.IsAuthenticated)
+        return context.user.Identity.Name
+    return "";
+};
+
+app.UseAnalytics(<API-KEY>, config); // Add middleware
+
+app.MapGet("/", () =>
+{
+    return Results.Ok(new OkObjectResult(new { message = "Hello, World!" }));
+});
+
+app.Run();
 ```
 
 ## Client ID and Privacy
@@ -121,51 +150,24 @@ Privacy Levels:
 - `2` - The client IP address is never accessed and location is never inferred.
 
 ```cs
-using analytics;
-using Microsoft.AspNetCore.Mvc;
-
-var builder = WebApplication.CreateBuilder(args);
-
-var app = builder.Build();
-
-var config = Config()
-config.PrivacyLevel = 2
-
-app.UseAnalytics(<API-KEY>, config); // Add middleware
-
-app.MapGet("/", () =>
-{
-    return Results.Ok(new OkObjectResult(new { message = "Hello, World!" }));
-});
-
-app.Run();
+var config = Config();
+config.PrivacyLevel = 2; // Disable IP storing and location inference
 ```
 
 With any of these privacy levels, there is the option to define a custom user ID as a function of a request by providing a mapper function in the API middleware configuration. For example, your service may require an API key sent in the `X-AUTH-TOKEN` header field that can be used to identify a user. In the dashboard, this custom user ID will identify the user in conjunction with the IP address or as an alternative.
 
 ```cs
-using analytics;
-using Microsoft.AspNetCore.Mvc;
-
-var builder = WebApplication.CreateBuilder(args);
-
-var app = builder.Build();
-
 var config = Config()
-config.GetUserID = (context) => {
-    if (context.user.Identity.IsAuthenticated)
-        return context.user.Identity.Name;
+config.GetIPAddress = (HttpContext context) => {
+    if (context.Request.Headers.TryGetValue("X-Forwarded-For", out var iPAddress))
+        return ipAddress.ToString();
     return "";
 };
-
-app.UseAnalytics(<API-KEY>, config); // Add middleware
-
-app.MapGet("/", () =>
-{
-    return Results.Ok(new OkObjectResult(new { message = "Hello, World!" }));
-});
-
-app.Run();
+config.GetUserAgent = (HttpContext context) => {
+    if (context.Request.Headers.TryGetValue("User-Agent", out var userAgent))
+        return userAgent.ToString();
+    return "";
+};
 ```
 
 ## Data and Security
@@ -183,7 +185,7 @@ For any given request to your API, data recorded is limited to:
 - Status code
 - Response time
 - API hostname
-- API framework (FastAPI, Flask, Express etc.)
+- API framework (ASP.NET Core)
 
 Data collected is only ever used to populate your analytics dashboard. All stored data is pseudo-anonymous, with the API key the only link between you and your logged request data. Should you lose your API key, you will have no method to access your API analytics.
 
