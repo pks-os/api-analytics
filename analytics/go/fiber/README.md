@@ -12,6 +12,8 @@ Head to [apianalytics.dev/generate](https://apianalytics.dev/generate) to genera
 
 Add our lightweight middleware to your API. Almost all processing is handled by our servers so there is minimal impact on the performance of your API.
 
+[![Fiber](https://img.shields.io/badge/go.mod-Fiber-blue)](https://github.com/tom-draper/api-analytics/tree/main/analytics/go/fiber)
+
 ```bash
 go get -u github.com/tom-draper/api-analytics/analytics/go/fiber
 ```
@@ -44,7 +46,7 @@ func main() {
 
 ### 3. View your analytics
 
-Your API will now log and store incoming request data on all valid routes. Your logged data can be viewed using two methods:
+Your API will now log and store incoming request data on all routes. Your logged data can be viewed using two methods:
 
 1. Through visualizations and statistics on the dashboard
 2. Accessed directly via the data API

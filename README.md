@@ -23,7 +23,7 @@ Add our lightweight middleware to your API. Almost all processing is handled by 
 
 #### FastAPI
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[fastapi]
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
 #### Flask
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[flask]
@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
 #### Django
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[django]
@@ -89,7 +89,7 @@ MIDDLEWARE = [
 
 #### Tornado
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[tornado]
@@ -123,7 +123,7 @@ if __name__ == "__main__":
 
 #### Express
 
-[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://img.shields.io/npm/v/node-api-analytics)
+[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://www.npmjs.com/package/node-api-analytics)
 
 ```bash
 npm install node-api-analytics
@@ -148,7 +148,7 @@ app.listen(8080, () => {
 
 #### Fastify
 
-[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://img.shields.io/npm/v/node-api-analytics)
+[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://www.npmjs.com/package/node-api-analytics)
 
 ```bash
 npm install node-api-analytics
@@ -177,7 +177,7 @@ fastify.listen({ port: 8080 }, function (err, address) {
 
 #### Koa
 
-[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://img.shields.io/npm/v/node-api-analytics)
+[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://www.npmjs.com/package/node-api-analytics)
 
 ```bash
 npm install node-api-analytics
@@ -497,7 +497,7 @@ end
 
 #### ASP.NET Core
 
-![NuGet Version](https://img.shields.io/nuget/v/APIAnalytics.AspNetCore)
+[![NuGet Version](https://img.shields.io/nuget/v/APIAnalytics.AspNetCore)](https://www.nuget.org/packages/APIAnalytics.AspNetCore)
 
 ```sh
 dotnet add package APIAnalytics.AspNetCore
@@ -523,7 +523,7 @@ app.Run();
 
 ### 3. View your analytics
 
-Your API will now log and store incoming request data on all valid routes. Your logged data can be viewed using two methods:
+Your API will now log and store incoming request data on all routes. Your logged data can be viewed using two methods:
 
 1. Through visualizations and statistics on the dashboard
 2. Accessed directly via the data API

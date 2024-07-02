@@ -14,7 +14,7 @@ Add our lightweight middleware to your API. Almost all processing is handled by 
 
 #### FastAPI
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[fastapi]
@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
 #### Flask
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[flask]
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
 #### Django
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[django]
@@ -80,7 +80,7 @@ MIDDLEWARE = [
 
 #### Tornado
 
-[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.com/project/api-analytics)
+[![PyPi version](https://badgen.net/pypi/v/api-analytics)](https://pypi.org/project/api-analytics)
 
 ```bash
 pip install api-analytics[tornado]
@@ -114,7 +114,7 @@ if __name__ == "__main__":
 
 ### 3. View your analytics
 
-Your API will now log and store incoming request data on all valid routes. Your logged data can be viewed using two methods:
+Your API will now log and store incoming request data on all routes. Your logged data can be viewed using two methods:
 
 1. Through visualizations and statistics on the dashboard
 2. Accessed directly via the data API

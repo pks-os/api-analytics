@@ -12,6 +12,8 @@ Head to [apianalytics.dev/generate](https://apianalytics.dev/generate) to genera
 
 Add our lightweight middleware to your API. Almost all processing is handled by our servers so there is minimal impact on the performance of your API.
 
+[![Npm package version](https://img.shields.io/npm/v/node-api-analytics)](https://www.npmjs.com/package/node-api-analytics)
+
 ```bash
 npm install node-api-analytics
 ```
@@ -79,7 +81,7 @@ app.listen(8080, () =>
 
 ### 3. View your analytics
 
-Your API will now log and store incoming request data on all valid routes. Your logged data can be viewed using two methods:
+Your API will now log and store incoming request data on all routes. Your logged data can be viewed using two methods:
 
 1. Through visualizations and statistics on the dashboard
 2. Accessed directly via the data API
